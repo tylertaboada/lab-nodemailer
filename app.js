@@ -4,7 +4,6 @@ const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 
 const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 const connectMongo = require('connect-mongo');
 
@@ -26,15 +25,12 @@ app.use(
   sassMiddleware({
     src: join(__dirname, 'public'),
     dest: join(__dirname, 'public'),
-    outputStyle:
-      process.env.NODE_ENV === 'development' ? 'nested' : 'compressed',
+    outputStyle: process.env.NODE_ENV === 'development' ? 'nested' : 'compressed',
     sourceMap: false,
     force: true
   })
 );
 app.use(express.static(join(__dirname, 'public')));
-
-app.use(cookieParser());
 
 app.use(
   expressSession({
@@ -43,9 +39,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 60 * 60 * 24 * 15,
-      sameSite: true,
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development'
+      httpOnly: true
     },
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
