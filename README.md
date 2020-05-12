@@ -6,7 +6,7 @@
 
 ![image](https://user-images.githubusercontent.com/23629340/37091320-032a2cb0-2208-11e8-8b73-27060f1960c3.png)
 
-Almost every time we register on a web app, we have to confirm our account by clicking on a link that's been sent to our email. This is a great way to avoid registering users with fake info. In this lab, we will do the same exact thing - create app that will allow users to signup but their status will be by default set to `Pending Confirmation` and after they get the email verification code to their email and respond to it, their status will be changed to `active`. We will use **Nodemailer** for this!
+Almost every time you register on a new service, you're asked to confirm your account by clicking on a link that's been sent to your email. This is a great way to avoid registering users with wrong or made up information. In this lab, we will do the same exact thing - create an app that will allow users to sign up, but their status will be by default set to `pending_confirmation`. After creating an account, the user should receive a confirmation message with a clickable link that includes a confirmation "token" in the query. After navigating to this link, their status should be changed to `active`. We will use **Nodemailer** for this!
 
 ## Requirements
 
@@ -29,11 +29,10 @@ $ git push origin master
 
 ### Iteration 1 - User Model
 
-First, we need to modify the `User` model. Inside the `models` folder, you will find a `user.js` file. We already have the `username` and `password` fields, so we need to add the followings:
+First, we need to modify the `User` model. Inside the `models` folder, you will find a `user.js` file. We already have the `email` and `password` fields, so we need to add the followings:
 
 - **`status`** - will be a string, and you should add an `enum` because the only possible values are: _"Pending Confirmation"_ or _"Active"_. By default, when a new user is created, it will be set to _"Pending Confirmation"_.
 - **`confirmationCode`** - here we will store a confirmation code; it will be unique for each user.
-- **`email`** - the user will complete the signup form with the email they will use to confirm the account.
 
 ### Iteration 2 - Signup Process
 
@@ -41,7 +40,6 @@ First, we need to modify the `User` model. Inside the `models` folder, you will 
 
 On the `auth/signup.hbs` file you need to add an `input` tag for the **email**. When the user clicks on the `signup` button, you should store the following values in the database:
 
-- **username** - from the `req.body`;
 - **password** - after hashing the value of the `password` field from the `req.body`;
 - **email** - from the `req.body`;
 - **confirmationCode** - for creating a confirmation code, you can use any methodology, from installing the npm package for email verification to simplest `Math.random()` function on some string.
@@ -50,8 +48,7 @@ Example:
 
 ```js
 const generateId = length => {
-  const characters =
-    '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let token = '';
   for (let i = 0; i < length; i++) {
     token += characters[Math.floor(Math.random() * characters.length)];
@@ -75,7 +72,7 @@ Inside the route, after comparing the confirmation code, you have to set the `st
 
 ### Iteration 4 - Profile View
 
-Finally, you have to create a `profile.hbs` view, where you have to render the `username` and the `status` of the user.
+Finally, you have to create a `profile.hbs` view, where you have to render the `name` and the `status` of the user.
 
 ### Bonus! Styling the Email
 
