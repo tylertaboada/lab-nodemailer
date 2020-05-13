@@ -53,6 +53,7 @@ const generateId = length => {
   for (let i = 0; i < length; i++) {
     token += characters[Math.floor(Math.random() * characters.length)];
   }
+  return token;
 };
 ```
 
